@@ -19,17 +19,17 @@ class Contato {
             return false;
         }
     }
-    public function getNome($email){
-        $sql = "SELECT nome FROM contato WHERE email = :email";
+    public function getInfo($id){
+        $sql = "SELECT * FROM contato WHERE id = :id";
         $sql = $this->pdo->prepare($sql);
-        $sql->bindValue(':email', $email);
-        $sql->execute();
+        $sql -> bindValue(':id', $id);
+        $sql -> execute();
+
         if($sql->rowCount() > 0){
-           $info = $sql->fetch();
-           return $info['nome']; 
+            return $sql->fetch();
         }
         else{
-            return '';
+            return array();
         }
     }
     public function getAll(){
@@ -42,16 +42,17 @@ class Contato {
             return array();
         }
     }
-    public function editar($nome, $email){
-        if($this->existeEmail($email)){
-            $sql = "UPDATE contato SET nome = :nome WHERE email = :email";
+    public function editar($nome, $email, $id){
+        if($this->existeEmail($email) == false){
+            $sql = "UPDATE contato SET nome = :nome, email = :email WHERE id = :id";
             $sql = $this->pdo->prepare($sql);
             $sql->bindValue(':nome', $nome);
             $sql->bindValue(':email', $email);
+            $sql->bindValue(':id', $id);
             $sql->execute();
             return true;
-        }   
-        else {
+        }
+        else{
             return false;
         }
     }
